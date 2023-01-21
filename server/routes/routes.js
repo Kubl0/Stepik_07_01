@@ -3,6 +3,7 @@ const express = require("express");
 const routes = express.Router();
 const dbo = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
+const serverless = require("serverless-http");
 
 routes.route("/productsmany").post(function (req, response) {
   let db_connect = dbo.getDb("products");
@@ -116,3 +117,5 @@ routes.route("/totalvalue").get(function (req, res) {
 });
 
 module.exports = routes;
+
+module.exports.handler = serverless(app);
