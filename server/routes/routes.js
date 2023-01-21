@@ -3,9 +3,8 @@ const express = require("express");
 const routes = express.Router();
 const dbo = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
-const serverless = require("serverless-http");
 
-routes.route("/productsmany").post(function (req, response) {
+routes.post("/productsmany", async (req, response) => {
   let db_connect = dbo.getDb("products");
   let myobj = req.body;
 
@@ -15,7 +14,7 @@ routes.route("/productsmany").post(function (req, response) {
   });
 });
 
-routes.route("/products").post(function (req, response) {
+routes.post("/products", async (req, response) => {
   let db_connect = dbo.getDb("products");
   let myobj = req.body;
   //sprawdz czy obiekt o takiej nazwie istnieje
@@ -34,7 +33,7 @@ routes.route("/products").post(function (req, response) {
     });
 });
 
-routes.route("/products").get(function (req, res) {
+routes.get("/products", async (req, res) => {
   let db_connect = dbo.getDb("products");
 
   let query = {};
@@ -63,7 +62,7 @@ routes.route("/products").get(function (req, res) {
     });
 });
 
-routes.route("/removeallproducts").delete(function (req, res) {
+routes.delete("/removeallproducts", async (req, res) => {
   let db_connect = dbo.getDb("products");
   db_connect.collection("products").deleteMany({}, function (err, result) {
     if (err) throw err;
@@ -71,7 +70,7 @@ routes.route("/removeallproducts").delete(function (req, res) {
   });
 });
 
-routes.route("/products/:id").put(function (req, res) {
+routes.put("/products/:id", async (req, res) => {
   let db_connect = dbo.getDb("products");
   let myquery = { _id: ObjectId(req.params.id) };
   let newvalues = {
@@ -89,7 +88,7 @@ routes.route("/products/:id").put(function (req, res) {
     });
 });
 
-routes.route("/products/:id").delete(function (req, res) {
+routes.delete("/products/:id", async (req, res) => {
   let db_connect = dbo.getDb("products");
   let myquery = { _id: ObjectId(req.params.id) };
   db_connect.collection("products").deleteOne(myquery, function (err, result) {
@@ -98,7 +97,7 @@ routes.route("/products/:id").delete(function (req, res) {
   });
 });
 
-routes.route("/totalvalue").get(function (req, res) {
+routes.get("/totalvalue", async (req, res) => {
   let db_connect = dbo.getDb("products");
   db_connect
     .collection("products")
@@ -117,5 +116,3 @@ routes.route("/totalvalue").get(function (req, res) {
 });
 
 module.exports = routes;
-
-module.exports.handler = serverless(app);
